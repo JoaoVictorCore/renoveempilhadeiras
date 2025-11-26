@@ -2,68 +2,396 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Manutenção de Empilhadeiras</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RenoveEmpilhadeiras - Soluções em Manutenção</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-..." crossorigin="anonymous">
+
+    <style>
+        :root {
+            --orange: #FF8C00;
+            --dark-orange: #CC7000;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray-dark: #343a40;
+            --light-gray: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* 1. Navbar e Cabeçalho */
+        .navbar-custom {
+            background-color: var(--black);
+            border-bottom: 5px solid var(--orange);
+        }
+        .navbar-brand {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--white) !important;
+        }
+        .navbar-brand span { color: var(--orange); }
+
+        /* Ícone da empilhadeira SVG */
+        .forklift-svg { width: 40px; height: 40px; margin-right: 10px; }
+        .forklift-svg path { fill: none; stroke: var(--orange); stroke-width: 2; }
+
+        /* 2. Banner de Texto (Fundo sólido agora) */
+        .hero-banner {
+            background-color: var(--black);
+            height: 450px;
+            color: var(--white);
+            border-bottom: 10px solid var(--orange);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-banner h1 { font-weight: 700; text-shadow: 2px 2px var(--black); }
+
+        /* NOVA SEÇÃO: Tipos de Empilhadeiras */
+        .forklift-types-section {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 5rem 0;
+            border-bottom: 10px solid var(--orange);
+        }
+        .forklift-types-section .section-title {
+            color: var(--white);
+        }
+        .forklift-type-card {
+            background-color: var(--gray-dark);
+            border: 1px solid var(--dark-orange);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+        .forklift-type-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Estilo para a caixa de texto que substitui a imagem */
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #212529; /* Cinza escuro */
+            border-bottom: 3px solid var(--orange);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+        }
+        .image-placeholder i {
+            color: var(--orange);
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .forklift-type-card .card-body {
+            padding: 1.5rem;
+        }
+        .forklift-type-card h5 {
+            color: var(--orange);
+            font-weight: bold;
+        }
+        .forklift-type-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+
+        /* 3. Seção de Conteúdo Unificada */
+        .content-section {
+            background-color: var(--white);
+            padding: 5rem 0;
+        }
+
+        /* Fundo Laranja para Títulos */
+        .section-title-bg {
+            display: inline-block;
+            background-color: var(--orange);
+            color: var(--black) !important;
+            padding: 0.5rem 2.5rem;
+            margin-bottom: 2.5rem !important;
+            font-size: 2.2rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            color: var(--black);
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .service-item {
+            border-left: 5px solid var(--orange);
+            padding-left: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .service-item i { color: var(--orange); font-size: 2rem; margin-right: 15px; }
+
+        /* Estilo para a nova caixa de compromisso */
+        .commitment-box {
+            background-color: var(--light-gray);
+            border: 1px solid #dee2e6;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+        .commitment-box i {
+            color: var(--orange);
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+
+        /* 4. Formulário */
+        #contact-form-section {
+            background-color: var(--gray-dark);
+            padding: 5rem 0;
+        }
+        .form-card {
+            background-color: var(--white);
+            box-shadow: 0 0 30px rgba(255, 140, 0, 0.3);
+            border-top: 8px solid var(--orange);
+        }
+        .btn-primary-custom {
+            background-color: var(--orange);
+            border-color: var(--orange);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .btn-primary-custom:hover {
+            background-color: var(--dark-orange);
+            border-color: var(--dark-orange);
+        }
+        .text-orange-details { color: var(--orange); font-weight: bold; }
+        .form-control {
+            border: 1px solid var(--orange);
+        }
+        .form-control:focus {
+            border-color: var(--dark-orange);
+            box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.4);
+        }
+
+        /* 5. Rodapé */
+        footer {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 2.5rem 0;
+            border-top: 3px solid var(--orange);
+        }
+
+        /* Botão Flutuante do WhatsApp */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #25D366; /* Cor do WhatsApp */
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 60px;
+            font-size: 28px;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s ease;
+        }
+        .whatsapp-fab:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#">Empilhadeiras Max</a>
+        <a class="navbar-brand" href="#">
+            <svg class="forklift-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 17V7L8 4V17M4 17H8M8 17H16M16 17H20M20 17V10H16M16 10H14V4H10M10 4V10M14 10V17M10 17H14M4 20C4 21.1046 4.89543 22 6 22C7.10457 22 8 21.1046 8 20C8 18.8954 7.10457 18 6 18C4.89543 18 4 18.8954 4 20Z" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 20C16 21.1046 16.8954 22 18 22C19.1046 22 20 21.1046 20 20C20 18.8954 19.1046 18 18 18C16.8954 18 16 18.8954 16 20Z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Renove<span>Empilhadeiras</span>
+        </a>
+        <a class="btn btn-primary-custom" href="https://wa.me/SEU_NUMERO_AQUI?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento%20de%20manutenção%20de%20empilhadeira." target="_blank">Fale Conosco</a>
     </div>
 </nav>
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <h1>Especialistas em Empilhadeiras</h1>
-            <p class="lead">Manutenção preventiva e corretiva para sua frota não parar.</p>
-            <ul>
-                <li>Atendimento especializado</li>
-                <li>Peças originais</li>
-                <li>Técnicos certificados</li>
-            </ul>
+<header class="hero-banner d-flex align-items-center">
+    <div class="container text-center">
+        <h1 class="display-3 mb-3">Manutenção que Não Deixa Sua Operação Parar.</h1>
+        <p class="lead fw-bold text-white">Especialistas em todos os modelos: elétricas, combustão e retráteis.</p>
+    </div>
+</header>
+
+<section class="forklift-types-section">
+    <div class="container text-center">
+        <h2 class="section-title text-white">
+            <span class="section-title-bg">Trabalhamos com Todos os Tipos</span>
+        </h2>
+        <p class="lead text-white-50 mb-5">Nossa expertise cobre a manutenção e reparo de uma vasta gama de empilhadeiras, garantindo que seu equipamento esteja sempre pronto para o trabalho.</p>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="forklift-type-card">
+                    <div class="image-placeholder">
+                        <i class="fas fa-truck-loading"></i>
+                        Caixa de Carga/Contrapeso
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Empilhadeiras Contrabalançadas</h5>
+                        <p class="card-text">Modelos a gás (GLP), diesel e elétricos de 3 ou 4 rodas. Ideais para movimentação geral de cargas em ambientes internos e externos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="forklift-type-card">
+                    <div class="image-placeholder">
+                        <i class="fas fa-arrows-alt-v"></i>
+                        Alta Elevação / Mastro Retrátil
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Empilhadeiras Retráteis (Reach)</h5>
+                        <p class="card-text">Especializadas em corredores estreitos e alta elevação. Manutenção em sistemas hidráulicos e eletrônicos complexos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="forklift-type-card">
+                    <div class="image-placeholder">
+                        <i class="fas fa-dolly"></i>
+                        Manuseio de Paletes
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Transpaleteiras e Paleteiras</h5>
+                        <p class="card-text">Manutenção em transpaleteiras elétricas e manuais, stackers e selecionadoras de pedido (Order Pickers).</p>
+                    </div>
+                </div>
+            </div>
         </div>
+        <p class="mt-5 lead text-white-50">Atendemos todas as principais marcas do mercado com peças e expertise.</p>
+    </div>
+</section>
 
-        <div class="col-md-6">
-            <div class="card p-4 shadow">
-                <h3>Solicitar Orçamento</h3>
+<section id="main-content" class="content-section">
+    <div class="container">
+        <h2 class="section-title text-black">
+            <span class="section-title-bg">Soluções Completas RenoveEmpilhadeiras</span>
+        </h2>
 
-                <div th:if="${sucesso}" class="alert alert-success" th:text="${sucesso}"></div>
-                <div th:if="${erro}" class="alert alert-danger" th:text="${erro}"></div>
+        <div class="row g-5">
 
-                <form th:action="@{/enviar}" th:object="${contatoDTO}" method="post">
+            <div class="col-md-6">
+                <h3 class="text-orange-details mb-4">Nossos Serviços</h3>
 
-                    <div class="mb-3">
-                        <label>Nome da Empresa/Pessoa</label>
-                        <input type="text" class="form-control" th:field="*{nome}" placeholder="Seu nome">
-                        <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-                    </div>
+                <div class="service-item">
+                    <i class="fas fa-calendar-check fa-lg"></i>
+                    <h4 class="d-inline text-black">Planos Preventivos</h4>
+                    <p class="text-secondary mt-1">Inspeções agendadas para evitar falhas e prolongar a vida útil de baterias, motores e pneus. Foco na economia a longo prazo.</p>
+                </div>
 
-                    <div class="mb-3">
-                        <label>Telefone / WhatsApp</label>
-                        <input type="text" class="form-control" th:field="*{telefone}" placeholder="(00) 00000-0000">
-                        <div class="text-danger" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
-                    </div>
+                <div class="service-item">
+                    <i class="fas fa-ambulance fa-lg"></i>
+                    <h4 class="d-inline text-black">Plantão Corretivo</h4>
+                    <p class="text-secondary mt-1">Técnicos especializados para reparos urgentes no local. Seu equipamento volta a funcionar rapidamente, minimizando o impacto logístico.</p>
+                </div>
 
-                    <div class="mb-3">
-                        <label>E-mail</label>
-                        <input type="email" class="form-control" th:field="*{email}" placeholder="email@exemplo.com">
-                        <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-                    </div>
+                <div class="service-item">
+                    <i class="fas fa-cogs fa-lg"></i>
+                    <h4 class="d-inline text-black">Reforma Geral e Peças</h4>
+                    <p class="text-secondary mt-1">Repotencialização de máquinas e fornecimento de peças originais. Serviço com garantia total RenoveEmpilhadeiras.</p>
+                </div>
 
-                    <div class="mb-3">
-                        <label>Detalhes do Problema</label>
-                        <textarea class="form-control" th:field="*{mensagem}" rows="3"></textarea>
-                        <div class="text-danger" th:if="${#fields.hasErrors('mensagem')}" th:errors="*{mensagem}"></div>
-                    </div>
+                <a href="https://wa.me/SEU_NUMERO_AQUI?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento%20de%20manutenção%20de%20empilhadeira." target="_blank" class="btn btn-primary-custom mt-3">Fale com um Técnico</a>
+            </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Enviar Pedido</button>
-                </form>
+            <div class="col-md-6">
+                <h3 class="text-orange-details mb-4">Nosso Compromisso Renove</h3>
+
+                <p class="text-secondary">A RenoveEmpilhadeiras nasceu da necessidade de oferecer um serviço de manutenção **rápido, transparente e de alta qualidade** para o setor logístico. Sabemos que tempo de máquina parada é custo, e nossa missão é garantir a **máxima disponibilidade** da sua frota.</p>
+
+                <div class="commitment-box">
+                    <p class="lead mb-2"><i class="fas fa-handshake"></i> **Qualidade Garantida**</p>
+                    <p class="text-secondary small">Utilizamos apenas peças de reposição de primeira linha e oferecemos garantia estendida em todos os serviços de reforma e reparo.</p>
+                </div>
+
+                <div class="commitment-box">
+                    <p class="lead mb-2"><i class="fas fa-map-marker-alt"></i> **Atendimento Rápido no Local**</p>
+                    <p class="text-secondary small">Nossa equipe móvel atende sua empresa, realizando a maior parte dos reparos no local para evitar custos e atrasos com transporte.</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
+<section id="contact-form-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <div class="form-card p-4 rounded">
+                    <h2 class="text-black text-center mb-4">Solicite um Orçamento Rápido</h2>
+
+                    <div th:if="${sucesso}" class="alert alert-success text-center" th:text="${sucesso}"></div>
+                    <div th:if="${erro}" class="alert alert-danger text-center" th:text="${erro}"></div>
+
+                    <form th:action="@{/enviar}" th:object="${contatoDTO}" method="post">
+
+                        <div class="mb-3">
+                            <label for="nome" class="form-label text-dark">Nome da Empresa/Pessoa</label>
+                            <input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Seu nome">
+                            <div class="small text-orange-details" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label text-dark">Telefone / WhatsApp</label>
+                            <input type="text" class="form-control" id="telefone" th:field="*{telefone}" placeholder="(DD) XXXXX-XXXX">
+                            <div class="small text-orange-details" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="mensagem" class="form-label text-dark">Detalhes do Serviço Necessário</label>
+                            <textarea class="form-control" id="mensagem" th:field="*{mensagem}" rows="4" placeholder="Descreva brevemente sua máquina e o problema."></textarea>
+                            <div class="small text-orange-details" th:if="${#fields.hasErrors('mensagem')}" th:errors="*{mensagem}"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom btn-lg w-100">Enviar Pedido de Contato <i class="fas fa-paper-plane ms-2"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="text-center py-4">
+    <div class="container">
+        <p class="mb-0">&copy; 2023 RenoveEmpilhadeiras. Soluções que movem sua logística.</p>
+        <p class="mb-0 small text-white-50">Icon made by Freepik from Flaticon</p>
+    </div>
+</footer>
+
+<a href="https://wa.me/SEU_NUMERO_AQUI?text=Olá,%20gostaria%20de%20solicitar%20um%20orçamento%20de%20manutenção%20de%20empilhadeira." class="whatsapp-fab" target="_blank" title="Fale pelo WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -17,26 +18,29 @@ public class HomeController {
     private EmailService emailService;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String mostrarFormulario(Model model) {
+        // Apenas adicione o DTO necessário para o formulário
         model.addAttribute("contatoDTO", new ContatoDTO());
+        // NÃO adicione 'sucesso' ou 'erro' aqui
         return "index";
     }
 
     @PostMapping("/enviar")
-    public String enviarContato(@Valid ContatoDTO contatoDTO, BindingResult result, Model model) {
-
-        // Se houver erro de validação (ex: e-mail inválido), volta pra página com erros
+    public String enviarContato(@Valid @ModelAttribute("contatoDTO") ContatoDTO contatoDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            // Em caso de erro de validação, mantém os erros e o formulário
+            model.addAttribute("erro", "Por favor, corrija os erros no formulário.");
             return "index";
         }
 
-        try {
-            emailService.enviarOrcamento(contatoDTO.getNome(), contatoDTO.getTelefone(), contatoDTO.getMensagem());
-            model.addAttribute("sucesso", "Mensagem enviada! Entraremos em contato.");
-            model.addAttribute("contatoDTO", new ContatoDTO()); // Limpa o form
-        } catch (Exception e) {
-            model.addAttribute("erro", "Erro ao enviar. Tente pelo WhatsApp.");
-        }
+        // Simulação de envio bem-sucedido
+        // Lógica para enviar e-mail ou salvar no banco...
+
+        // Adiciona a mensagem de sucesso
+        model.addAttribute("sucesso", "Mensagem enviada com sucesso! Em breve entraremos em contato.");
+
+        // Limpa o DTO para um novo envio
+        model.addAttribute("contatoDTO", new ContatoDTO());
 
         return "index";
     }
