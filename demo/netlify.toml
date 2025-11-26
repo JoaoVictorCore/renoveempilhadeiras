@@ -1,0 +1,16 @@
+[build]
+# Define o diretório onde o Netlify deve procurar por arquivos para publicar.
+# Neste caso, é a pasta do Thymeleaf onde o index.html reside.
+publish = "src/main/resources/templates"
+
+# O comando de build é deixado vazio ("") para que o Netlify não tente
+# executar um build complexo (como 'mvn clean install' do Spring Boot),
+# tratando o conteúdo como puramente estático.
+command = ""
+
+[[redirects]]
+# Garante que, se alguém tentar acessar uma URL que não existe (como uma página interna),
+# o Netlify retorne o seu index.html, facilitando a navegação inicial.
+from = "/*"
+to = "/index.html"
+status = 200
